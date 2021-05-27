@@ -1,0 +1,59 @@
+{% extends "herald/base.html" %}
+{% load static %}
+{% block content %}
+
+<!-- ======= Hero Section ======= -->
+<section id="hero" class="d-flex align-items-center">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
+                <h1>HeraldBot - Your very own smart Chat Agent</h1>
+                <h2>Get your queries answered quickly and easily with this AI powered chatbot</h2>
+                <div class="d-flex">
+                    <div class="btn-get-started scrollto" id="getStarted">Lets Chat</div>
+                </div>
+            </div>
+            <div class="col-lg-6 order-1 order-lg-2 hero-img">
+                <img src="{% static 'herald/assets/img/chathome.jpg' %}" class="img-fluid animated" alt="">
+            </div>
+        </div>
+    </div>
+    <div></div>
+
+</section>
+<!-- End Hero -->
+
+<!-- ======= Featured Services Section ======= -->
+<section id="featured-services" class="featured-services" style="padding-bottom: 20px;">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-4 col-md-6">
+                <div class="icon-box">
+                    <div class="icon"><i class="icofont-network-tower"></i></div>
+                    <h4 class="title"><a href="">Easy Access</a></h4>
+                    <p class="description">Anyone can easily get their queries answered regarding Herald College Kathmandu</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-4 mt-md-0">
+                <div class="icon-box">
+                    <div class="icon"><i class="icofont-speed-meter"></i></div>
+                    <h4 class="title"><a href="">Quick Response</a></h4>
+                    <p class="description">No need to wait longer hours to get any of your queries responded with this automated chat service</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-4 mt-lg-0">
+                <div class="icon-box">
+                    <div class="icon"><i class="icofont-support-faq"></i></div>
+                    <h4 class="title"><a href="">24-Hour Support</a></h4>
+                    <p class="description">Always ready to answer any of you queries at any time of the day.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<!-- End Featured Services Section -->
+
+{% endblock content %}

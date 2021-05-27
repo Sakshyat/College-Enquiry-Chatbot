@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>HeraldBot</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'herald/assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'herald/assets/vendor/icofont/icofont.min.css' %}" rel="stylesheet">
+    <link href="{% static 'herald/assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+    <link href="{% static 'herald/assets/vendor/venobox/venobox.css' %}" rel="stylesheet">
+    <link href="{% static 'herald/assets/vendor/owl.carousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="{% static 'herald/assets/css/style.css' %}" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top">
+        <div class="container d-flex align-items-center">
+
+            <a href="{% url 'herald-home' %}" class="logo mr-auto"><img src="{% static 'herald/assets/img/logo.png' %}" alt="" class="img-fluid"></a>
+
+            <nav class="nav-menu d-none d-lg-block">
+                <ul>
+                    {% url 'herald-home' as url %}
+                    <li class="{% if request.path == url %}active{% endif %}"><a href="{% url 'herald-home' %}">Home</a></li>
+
+                    {% url 'herald-review' as url %}
+                    <li class="{% if request.path == url %}active{% endif %}"><a href="{% url 'herald-review' %}">Review</a></li>
+                    {% if user.is_authenticated %}
+                    {% url 'profile' as url %}
+                    <li class="{% if request.path == url %}active{% endif %}"><a href="{% url 'profile' %}">Profile</a></li>
+                    {% else %}
+                    {% url 'login' as url %}
+                    <li class="{% if request.path == url %}active{% endif %}"><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}" class="get-started-btn scrollto">Logout</a>
+            {% else %}
+            <a href="{% url 'register' %}" class="get-started-btn scrollto">SignUp</a>
+            {% endif %}
+        </div>
+    </header>
+    <!-- End Header -->
+
+    <main id="main">
+
+        <div>
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% block content %}{% endblock %}
+        </div>
+
+        <!-- Chatbot -->
+        <div class="chat_icon">
+            <i class="icofont-speech-comments" aria-hidden="true"></i>
+        </div>
+
+        <div class="chat_box">
+            <div class="chat_head">
+                HeraldBot - Let's Chat
+            </div>
+
+            <form class="chat_form">
+                {% csrf_token %}
+
+                <div id="chatbox">
+                    <div class="col-md-8 ml-auto mr-auto">
+                        <p class="botText"></p>
+                    </div>
+                </div>
+
+                <div id="userInput" class="row">
+                    <div class="col-md-10">
+                        <input id="text" type="text" name="msg" placeholder="Message" class="form-control">
+                        <span><button type="submit" id="send" class="btn btn-success">Send</button></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- Chatbot End -->
+
+    </main>
+    <!-- End #main -->
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer" style="bottom: 0;">
+        <div class="container footer-bottom clearfix">
+            <div class="copyright">
+                &copy; Copyright <strong><span>HeraldBot</span></strong>. All Rights Reserved
+            </div>
+        </div>
+    </footer><!-- End Footer -->
+
+    <!-- Vendor JS Files -->
+    <script src="{% static 'herald/assets/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'herald/assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'herald/assets/vendor/jquery.easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'herald/assets/vendor/php-email-form/validate.js' %}"></script>
+    <script src="{% static 'herald/assets/vendor/waypoints/jquery.waypoints.min.js' %}"></script>
+    <script src="{% static 'herald/assets/vendor/counterup/counterup.min.js' %}"></script>
+    <script src="{% static 'herald/assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+    <script src="{% static 'herald/assets/vendor/venobox/venobox.min.js' %}"></script>
+    <script src="{% static 'herald/assets/vendor/owl.carousel/owl.carousel.min.js' %}"></script>
+
+    <!-- Template Main JS File -->
+    <script src="{% static 'herald/assets/js/main.js' %}"></script>
+
+    <!--Chatbox Script-->
+    <script>
+        $(document).ready(function() {
+            $(".chat_form").on("submit", function(event) {
+                var rawText = $("#text").val();
+                var userHtml = '<p class="userText"><span>' + rawText + "</span></p>";
+                $("#text").val("");
+                $("#chatbox").append(userHtml);
+                document.getElementById("userInput").scrollIntoView({
+                    block: "start",
+                    behavior: "smooth",
+                });
+                $.ajax({
+                    data: {
+                        msg: rawText,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    type: "POST",
+                    url: "/get",
+                }).done(function(data) {
+                    var botHtml = '<p class="botText"><span>' + data + "</span></p>";
+                    $("#chatbox").append($.parseHTML(botHtml));
+                    document.getElementById("userInput").scrollIntoView({
+                        block: "start",
+                        behavior: "smooth",
+                    });
+                });
+                event.preventDefault();
+            });
+        });
+
+    </script>
+    <!-- End Chatbox Script-->
+
+</body>
+
+</html>
