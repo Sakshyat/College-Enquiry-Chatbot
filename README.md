@@ -3,9 +3,8 @@
 Description: A django-based web application with an Mchine Leraning Chatbot using LSTM architecture
 
 # Requirements:
-  python 3.8.4
-  
-  django 3.1.6
+    python 3.8.4 
+    django 3.1.6
     
  # AI Libraries:
     tensorflow 2.4.1
