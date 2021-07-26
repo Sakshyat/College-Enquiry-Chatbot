@@ -1,6 +1,6 @@
 # College-Enquiry-Chatbot
 
-Description: A django-based web application with an Mchine Leraning Chatbot using LSTM architecture
+Description: A django-based web application with an Machine Learning Chatbot using LSTM architecture
 
 # Requirements:
     python 3.8.4 
